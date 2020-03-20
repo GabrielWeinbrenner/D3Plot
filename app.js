@@ -15,6 +15,14 @@ var xScale = d3.scaleLinear()
                     d => d.adultLiteracyRate))
                 .range([padding, width -padding])
 
+var colorScale = d3.scaleLinear()
+                    .domain(d3.extent(
+                        regionData, d=>{
+                            return d.growthRate
+                        }
+                    ))
+                    .range(['red','green'])
+
 d3.select("svg")
     .attr("width", width)
     .attr("height", height)
@@ -25,7 +33,8 @@ d3.select("svg")
         .attr("cx", d => xScale(d.adultLiteracyRate))
         .attr("cy", d=> yScale(d.subscribersPer100))
         .attr("r", 5)
+        .attr("fill", d=> colorScale(d.growthRate))
         .on("mouseover", d=>{
             d3.select("#currentCountry")
-                .text(d.region)
+                .text(d.region + " " + d.growthRate)
         })
